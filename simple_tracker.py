@@ -74,7 +74,39 @@ class AmazonAPI:
             return None
 
     def get_price(self):
-        return '99$'
+        price = None
+        try:
+            price = self.driver.find_element_by_id('priceblock_ourprice').text
+            price = self.convert_price(price)
+        except NoSuchElementException:
+            try:
+                availability = self.driver.find_element_by_id('availability').text
+                if 'Available' in availability:
+                    price = self.driver.find_element_by_class_name('olp-padding-right').text
+                    price = price[price.find(self.currency):]
+                    price = self.convert_price(price)
+            except Exception as e:
+                print(e)
+                print(f"Can't get price of a product - {self.driver.current_url}")
+                return None
+        except Exception as e:
+            print(e)
+            print(f"Can't get price of a product - {self.driver.current_url}")
+            return None
+        return price
+
+    def convert_price(self, price):
+        price = price.split(self.currency)[1]
+        try:
+            price = price.split("\n")[0] + "." + price.split("\n")[1]
+        except:
+            Exception()
+        try:
+            price = price.split(",")[0] + price.split(",")[1]
+        except:
+            Exception()
+        return float(price)
+
 
     # Makes it so the url will only contain the ID
     def shorten_url(self, asin):
