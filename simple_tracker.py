@@ -11,6 +11,10 @@ from amazon_config import(
 )
 
 from selenium.webdriver.common.keys import Keys
+
+from selenium.common.exceptions import NoSuchElementException
+import json
+from datetime import datetime
 import time
 
 class GenerateReport:
@@ -39,14 +43,19 @@ class AmazonAPI:
         print(f"Got {len(links)} links to products...")
         print("Getting info about products...")
         products = self.get_products_info(links)
-
+        print(f"Got info about {len(products)} products...")
         self.driver.quit()
+        return products
 
     def get_products_info(self, links):
         asins = self.get_asins(links)
         products = []
         for asin in asins:
             product = self.get_single_product_info(asin)
+            if product:
+                products.append(product)
+        return products
+
 
     def get_single_product_info(self, asin):
         print(f"Product ID: {asin} - getting data...")
@@ -56,6 +65,16 @@ class AmazonAPI:
         title = self.get_title()
         seller = self.get_seller()
         price = self.get_price()
+        if title and seller and price: # Makes sure we have all data
+            product_info = {
+                'asin'   : asin,
+                'url'    : product_short_url,
+                'title'  : title,
+                'seller' : seller,
+                'price'  : price
+            }
+            return product_info
+        return None
 
     def get_title(self):
         try:
@@ -158,3 +177,4 @@ if __name__ == '__main__':
     print("Hey!!!")
     amazon = AmazonAPI(NAME, FILTERS, BASE_URL, CURRENCY)
     data = amazon.run()
+    print(data)
