@@ -16,7 +16,7 @@ alot.
 
 What the program does:
 ----------------------------------------------
-1: Opens the browser
+1. Opens the browser
 2. Goes to amazon.com
 3. Goes into the search bar
 4. Inputs the item we are looking for
@@ -28,6 +28,12 @@ What the program does:
    and seller.
 9. The program will return a Json file with mainly all the products between the price
     range we selected and they will be in increasing order. 
+
+To Run it do type on command line:
+-----------------------------------------------
+1. .\venv\Scripts\activate
+2. pip install -r requirements.txt
+3. python simple_scraper.py
 
 
 

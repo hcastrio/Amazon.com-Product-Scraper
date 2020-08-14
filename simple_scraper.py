@@ -185,9 +185,6 @@ class AmazonAPI:
         return links
     
     
-
-
-
 if __name__ == '__main__':
     amazon = AmazonAPI(NAME, FILTERS, BASE_URL, CURRENCY)
     data = amazon.run()
