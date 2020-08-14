@@ -31,9 +31,11 @@ What the program does:
 
 To Run it do type on command line:
 -----------------------------------------------
-1. .\venv\Scripts\activate
-2. pip install -r requirements.txt
-3. python simple_scraper.py
+1. ** Install python first **
+2. py -m venv venv
+3. .\venv\Scripts\activate
+4. pip install -r requirements.txt
+5. python simple_scraper.py
 
 
 
