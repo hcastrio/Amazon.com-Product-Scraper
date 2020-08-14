@@ -39,7 +39,6 @@ class GenerateReport:
             json.dump(report, f)
         print("Done...")
 
-
     def get_now(self):
         now = datetime.now()
         return now.strftime("%d/%m/%Y %H:%M:%S")
@@ -51,6 +50,7 @@ class GenerateReport:
             print(e)
             print("Problem with sorting items")
             return None
+
 
 class AmazonAPI:
     def __init__(self, search_term, filters, base_url, currency):
@@ -128,20 +128,9 @@ class AmazonAPI:
         try:
             price = self.driver.find_element_by_id('priceblock_ourprice').text
             price = self.convert_price(price)
-        except NoSuchElementException:
-            try:
-                availability = self.driver.find_element_by_id('availability').text
-                if 'Available' in availability:
-                    price = self.driver.find_element_by_class_name('olp-padding-right').text
-                    price = price[price.find(self.currency):]
-                    price = self.convert_price(price)
-            except Exception as e:
-                print(e)
-                print(f"Can't get price of a product - {self.driver.current_url}")
-                return None
         except Exception as e:
-            print(e)
-            print(f"Can't get price of a product - {self.driver.current_url}")
+            
+            print(f"Price of a product not available - {self.driver.current_url}")
             return None
         return price
 
@@ -167,9 +156,6 @@ class AmazonAPI:
 
     def get_asin(self, product_link):
         return product_link[product_link.find('/dp/') + 4:product_link.find('/ref')]
-
-
-
     
    
     def get_products_links(self):
@@ -197,15 +183,12 @@ class AmazonAPI:
             print("Didn't get any products...")
             print(e)
         return links
-
-    
     
     
 
 
 
 if __name__ == '__main__':
-    print("Hey!!!")
     amazon = AmazonAPI(NAME, FILTERS, BASE_URL, CURRENCY)
     data = amazon.run()
     GenerateReport(NAME, FILTERS, BASE_URL, CURRENCY, data)
